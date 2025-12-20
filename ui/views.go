@@ -9,7 +9,7 @@ func (m Model) updateDataView(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q":
+		case "ctrl+c":
 			return m, tea.Quit
 		case "esc", "b":
 			m.view = MenuView
@@ -26,7 +26,7 @@ func (m Model) updateDataSend(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q":
+		case "ctrl+c":
 			return m, tea.Quit
 		case "esc", "b":
 			m.view = MenuView
@@ -69,7 +69,7 @@ func (m Model) updateSettings(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, cmd
 		} else {
 			switch msg.String() {
-			case "ctrl+c", "q":
+			case "ctrl+c":
 				return m, tea.Quit
 			case "esc", "b":
 				m.view = MenuView

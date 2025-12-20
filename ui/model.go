@@ -48,8 +48,8 @@ var keys = keyMap{
 		key.WithHelp("esc/b", "back"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("q", "ctrl+c"),
-		key.WithHelp("q", "quit"),
+		key.WithKeys("ctrl+c"),
+		key.WithHelp("quit", "ctrl+c"),
 	),
 }
 
@@ -124,7 +124,7 @@ func NewModel() Model {
 		help:          h,
 		keys:          keys,
 		view:          MenuView,
-		config:        cfg,
+		config:         cfg,
 		dataViewModel: dataview.NewModel(),
 		dataSendModel: datasend.NewModel(),
 		settingsModel: settings.NewModel(cfg),
