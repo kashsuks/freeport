@@ -49,7 +49,7 @@ func (s *Server) handleBattery(w http.ResponseWriter, r *http.Request) {
 		"app_name": "freeport",
 	}
 
-	w.Header().Set("Content-Type", "applications/json")
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 

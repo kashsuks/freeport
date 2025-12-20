@@ -18,7 +18,7 @@ func (m Model) updateDataView(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	m.dataViewModel.Table, cmd = m.dataViewModel.Table.Update(msg)
+	m.dataViewModel, cmd = m.dataViewModel.Update(msg)
 	return m, cmd
 }
 

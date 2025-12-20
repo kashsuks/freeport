@@ -27,8 +27,8 @@ type keyMap struct {
 
 var keys = keyMap{
 	Query: key.NewBinding(
-		key.WithKeys("q"),
-		key.WithHelp("q", "query battery"),
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "query"),
 	),
 	Back: key.NewBinding(
 		key.WithKeys("esc", "b"),
@@ -74,7 +74,7 @@ func NewModel() *Model {
 	}
 
 	rows := []table.Row{
-		{"Status", "Ready - Press 'q' to query battery"},
+		{"Status", "Ready - Press 'enter' to query battery"},
 	}
 
 	t := table.New(
@@ -99,7 +99,7 @@ func NewModel() *Model {
 	h := help.New()
 
 	ti := textinput.New()
-	ti.Placeholder = "Press 'q' to query battery data"
+	ti.Placeholder = "Press 'enter' to query battery data"
 
 	return &Model{
 		Table:   t,
@@ -138,7 +138,7 @@ func queryBatteryData() tea.Msg {
 func (m *Model) Update(msg tea.Msg) (*Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "q" && !m.loading {
+		if msg.String() == "enter" && !m.loading {
 			m.loading = true
 			m.errorMsg = ""
 			return m, queryBatteryData

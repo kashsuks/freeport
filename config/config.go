@@ -10,7 +10,7 @@ type Config struct {
 	WelcomeMessage string `json:"welcome_message"`
 }
 
-func getConfig() string {
+func getConfigPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return ".freeport_config.json"
@@ -24,7 +24,7 @@ func Load() *Config {
 		WelcomeMessage: "Welcome to Freeport!",
 	}
 
-	data, err := os.ReadFile(getConfig())
+	data, err := os.ReadFile(getConfigPath())
 	if err != nil {
 		return cfg
 	}
@@ -39,5 +39,5 @@ func (c *Config) Save() error {
 		return err
 	}
 
-	return os.WriteFile(getConfig(), data, 0644)
+	return os.WriteFile(getConfigPath(), data, 0644)
 }
