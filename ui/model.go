@@ -2,8 +2,8 @@ package ui
 
 import (
 	"freeport/config"
-	"freeport/features/datasend"
 	"freeport/features/dataview"
+	"freeport/features/datasend"
 	"freeport/features/settings"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -76,32 +76,27 @@ func (i item) FilterValue() string { return i.title }
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
 type Model struct {
-	list   list.Model
-	help   help.Model
-	keys   keyMap
-	view   View
-	config *config.Config
-	width  int
-	height int
+	list     list.Model
+	help     help.Model
+	keys     keyMap
+	view     View
+	config   *config.Config
+	width    int
+	height   int
 
-	//feature models
 	dataViewModel *dataview.Model
 	dataSendModel *datasend.Model
 	settingsModel *settings.Model
 }
 
-func NewMode() Model {
+func NewModel() Model {
 	cfg := config.Load()
 
-	rawItems := []item{
-		{title: "View Data", desc: "View system data and API information"},
-		{title: "Send Data", desc: "Send data through the API"},
-		{title: "Settings", desc: "Configure application settings"},
-		{title: "Exit", desc: "Exit the application"},
-	}
-	items := make([]list.Item, len(rawItems))
-	for i, v := range rawItems {
-		items[i] = v
+	items := []list.Item{
+		item{title: "View Data", desc: "View system data and API information"},
+		item{title: "Send Data", desc: "Send data through the API bus"},
+		item{title: "Settings", desc: "Configure application settings"},
+		item{title: "Exit", desc: "Exit the application"},
 	}
 
 	delegate := list.NewDefaultDelegate()
