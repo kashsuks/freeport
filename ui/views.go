@@ -29,11 +29,16 @@ func (m Model) updateDataSend(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c":
 			return m, tea.Quit
 		case "esc", "b":
-			m.view = MenuView
-			return m, nil
+			if m.dataSendModel.Mode == 0 {
+				m.view = MenuView
+				return m, nil
+			}
 		}
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	m.dataSendModel, cmd = m.dataSendModel.Update(msg)
+	return m, cmd
 }
 
 func (m Model) updateSettings(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -69,7 +74,7 @@ func (m Model) updateSettings(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, cmd
 		} else {
 			switch msg.String() {
-			case "ctrl+c":
+			case "ctrl+c", "q":
 				return m, tea.Quit
 			case "esc", "b":
 				m.view = MenuView

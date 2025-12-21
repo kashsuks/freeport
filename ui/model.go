@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"freeport/api"
 	"freeport/config"
 	"freeport/features/dataview"
 	"freeport/features/datasend"
@@ -48,8 +49,8 @@ var keys = keyMap{
 		key.WithHelp("esc/b", "back"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("ctrl+c"),
-		key.WithHelp("quit", "ctrl+c"),
+		key.WithKeys("q", "ctrl+c"),
+		key.WithHelp("q", "quit"),
 	),
 }
 
@@ -119,14 +120,19 @@ func NewModel() Model {
 
 	h := help.New()
 
+	dataSendModel := datasend.NewModel()
+	dataSendModel.SetProtocolCreatedCallback(func(p datasend.Protocol) {
+		api.RegisterProtocol(p.AppName, p.Passkey, p.Description)
+	})
+
 	return Model{
 		list:          l,
 		help:          h,
 		keys:          keys,
 		view:          MenuView,
-		config:         cfg,
+		config:        cfg,
 		dataViewModel: dataview.NewModel(),
-		dataSendModel: datasend.NewModel(),
+		dataSendModel: dataSendModel,
 		settingsModel: settings.NewModel(cfg),
 	}
 }

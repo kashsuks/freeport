@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -20,7 +21,7 @@ func (s *Server) Start() error {
 
 	mux.HandleFunc("/system/battery", s.handleBattery)
 
-	mux.HandleFunc("/", s.handleNotFound)
+	mux.HandleFunc("/", s.handleCustomOrNotFound)
 
 	log.Printf("API Server starting on port %s", s.port)
 	return http.ListenAndServe(":"+s.port, s.methodFilter(mux))
@@ -44,8 +45,8 @@ func (s *Server) handleBattery(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := map[string]interface{}{
-		"time": time.Now().Format(time.RFC3339),
-		"battery": battery,
+		"time":     time.Now().Format(time.RFC3339),
+		"battery":  battery,
 		"app_name": "freeport",
 	}
 
@@ -53,6 +54,24 @@ func (s *Server) handleBattery(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func (s *Server) handleNotFound(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleCustomOrNotFound(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/")
+	parts := strings.Split(path, "/")
+
+	if path == "" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
+	}
+
+	if len(parts) >= 2 {
+		appName := parts[0]
+		endpoint := parts[1]
+
+		if endpoint == "init" {
+			s.handleCustomInit(w, r, appName)
+			return
+		}
+	}
+
 	http.Error(w, "Not found", http.StatusNotFound)
 }
