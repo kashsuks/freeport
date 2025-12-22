@@ -588,7 +588,7 @@ func (m Model) viewCreate() string {
 		Foreground(lipgloss.Color("170")).
 		Padding(1, 0)
 
-	title := titleStyle.Render("📤 Create Custom Data Protocol")
+	title := titleStyle.Render("Create Custom Data Protocol")
 
 	info := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("243")).
