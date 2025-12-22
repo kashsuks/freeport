@@ -24,20 +24,15 @@ func (s *Server) Start() error {
 	mux.HandleFunc("/", s.handleCustomOrNotFound)
 
 	log.Printf("API Server starting on port %s", s.port)
-	return http.ListenAndServe(":"+s.port, s.methodFilter(mux))
-}
-
-func (s *Server) methodFilter(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
+	return http.ListenAndServe(":"+s.port, mux)
 }
 
 func (s *Server) handleBattery(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	battery, err := GetBatteryPercentage()
 	if err != nil {
 		http.Error(w, "Failed to get battery info", http.StatusInternalServerError)
@@ -63,14 +58,46 @@ func (s *Server) handleCustomOrNotFound(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	if len(parts) >= 2 {
-		appName := parts[0]
-		endpoint := parts[1]
+	if len(parts) < 2 {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
+	}
 
-		if endpoint == "init" {
-			s.handleCustomInit(w, r, appName)
+	appName := parts[0]
+	methodName := parts[1]
+
+	if appName == "system" {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
+	}
+
+	if methodName == "init" {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed for init", http.StatusMethodNotAllowed)
+			return
+		}
+		s.handleCustomInit(w, r, appName)
+		return
+	}
+
+	if len(parts) == 3 && parts[2] == "history" {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		s.handleCustomHistory(w, r, appName, methodName)
+		return
+	}
+
+	if len(parts) == 2 {
+		if r.Method == http.MethodGet || r.Method == http.MethodPost || r.Method == http.MethodDelete {
+			s.handleCustomMethod(w, r, appName, methodName)
+			return
+		}
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
 
 	http.Error(w, "Not found", http.StatusNotFound)

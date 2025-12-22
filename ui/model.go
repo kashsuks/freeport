@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"freeport/api"
 	"freeport/config"
 	"freeport/features/dataview"
@@ -121,8 +122,15 @@ func NewModel() Model {
 	h := help.New()
 
 	dataSendModel := datasend.NewModel()
+	
 	dataSendModel.SetProtocolCreatedCallback(func(p datasend.Protocol) {
+		fmt.Printf("DEBUG: Registering protocol %s with passkey %s\n", p.AppName, p.Passkey)
 		api.RegisterProtocol(p.AppName, p.Passkey, p.Description)
+	})
+	
+	dataSendModel.SetMethodCreatedCallback(func(appName, methodName, description string) {
+		fmt.Printf("DEBUG: Registering method %s for app %s\n", methodName, appName)
+		api.RegisterMethod(appName, methodName, description)
 	})
 
 	return Model{
