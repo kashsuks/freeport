@@ -2,7 +2,7 @@
 
 First off, I would like to thank you for considering contributing to Freeport! As a solo dev running this project, it's quite refreshing to see that someone would like to help :D
 
-Before starting off, please take some time to read this projects [Code of Conduct](https://127.0.0.1:8000/code-of-conduct/)
+Before starting off, please take some time to read this projects [Code of Conduct](https://freeport-tui.netlify.app/code-of-conduct/)
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
 
