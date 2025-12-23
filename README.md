@@ -4,4 +4,4 @@
 # freeport
 API Port for local data transfer and information
 
-Please refer to [docs](freeport-tui.netlify.app) for full details!
+Please refer to [docs](https://freeport-tui.netlify.app) for full details!
